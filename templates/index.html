@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FashionFlux</title>
+    <style>
+        body {
+            background-image: url('static/background.jpg'); /* Change the path as necessary */
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 3.5em; /* Increased heading size for better visibility */
+            margin-bottom: 30px; /* Increased margin for more spacing */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Added shadow for better readability */
+        }
+
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.8); /* Darker background for form container */
+            padding: 30px; /* Increased padding for a more spacious look */
+            border-radius: 15px; /* Increased border radius for softer corners */
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Added shadow for depth */
+        }
+
+        input[type="text"] {
+            width: 350px; /* Increased width of input field */
+            padding: 20px; /* Increased padding for comfort */
+            font-size: 1.5em; /* Increased font size for better readability */
+            border: none;
+            border-radius: 8px; /* Rounded corners for input field */
+            margin-bottom: 15px; /* Increased margin for spacing */
+            transition: border 0.3s; /* Smooth transition for border effect */
+        }
+
+        input[type="text"]:focus {
+            outline: none; /* Remove default outline */
+            border: 2px solid #28a745; /* Highlight border on focus */
+        }
+
+        button {
+            padding: 20px 40px; /* Increased button padding */
+            font-size: 1.5em; /* Increased font size for better visibility */
+            background-color: #28a745; /* Button color */
+            color: white;
+            border: none;
+            border-radius: 8px; /* Rounded corners for button */
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition for background color */
+        }
+
+        button:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>FashionFlux</h1>
+    <div class="form-container">
+        <input type="text" id="prompt" placeholder="Enter a description of your fashion item" required>
+        <button id="generate-button">Generate</button>
+    </div>
+    <img id="result-image" src="" alt="Generated Image" style="display:none;">
+    
+    <script>
+        document.getElementById('generate-button').addEventListener('click', function() {
+            const prompt = document.getElementById('prompt').value;
+
+            if (prompt) {
+                fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ prompt })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const resultImage = document.getElementById('result-image');
+                    resultImage.src = data.image_path;
+                    resultImage.style.display = 'block';
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                alert('Please enter a prompt.');
+            }
+        });
+    </script>
+</body>
+</html>
